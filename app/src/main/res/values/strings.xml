@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">shuttleapp</string>
+    <string name="title_activity_menu">MenuActivity</string>
+
 </resources>
