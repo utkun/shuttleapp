@@ -38,7 +38,7 @@
         android:layout_marginStart="22dp" />
 
     <TextView
-        android:text="pull and show uid here & later qr of uid"
+        android:text="pull and show uid here and later qr of uid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/balance"
