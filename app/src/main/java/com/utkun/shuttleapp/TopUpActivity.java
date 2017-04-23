@@ -51,18 +51,6 @@ public class TopUpActivity extends AppCompatActivity {
        // myRef.setValue("Hello, World!");
 
 
-      /*  ccbalance.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                dbbalance = dataSnapshot.getValue(Integer.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-*/
         paynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +59,7 @@ public class TopUpActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChild(ccno.getText().toString())) {
-                            textview.setText("card no found - success");
+                            textview.setText("card found - success");
                             /*
                                 if(ccmonth.equals(dataSnapshot.child(ccno.getText().toString()).child("validmonth").getValue(String.class))
                                         && ccyear.equals(dataSnapshot.child(ccno.getText().toString()).child("validyear").getValue(String.class))
