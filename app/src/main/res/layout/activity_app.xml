@@ -8,43 +8,48 @@
     tools:context="com.utkun.shuttleapp.MainActivity">
 
     <Button
-        android:id="@+id/balance"
-        android:text="BALANCE"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:id="@+id/topup"
         android:text="TOP UP"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/balance"
-        android:layout_toStartOf="@+id/balance"
-        android:layout_marginRight="23dp"
-        android:layout_marginEnd="23dp" />
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="WELCOME"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="55dp"
+        android:id="@+id/welcometext" />
+
+    <ImageView
+        android:id="@+id/qrImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="77dp"
+        android:id="@+id/credittext"
+        android:text="XXX"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/logout"
-        android:text="LOGOUT"
+        android:text="LOG OUT"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/balance"
-        android:layout_toEndOf="@+id/balance"
-        android:layout_marginLeft="22dp"
-        android:layout_marginStart="22dp" />
-
-    <TextView
-        android:text="pull and show uid here and later qr of uid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/balance"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="55dp"
-        android:id="@+id/uidtext" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/topup"
+        android:layout_alignStart="@+id/topup"
+        android:layout_marginBottom="21dp" />
 
 
 </RelativeLayout>

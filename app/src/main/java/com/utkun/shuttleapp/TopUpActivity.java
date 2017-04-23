@@ -21,17 +21,18 @@ public class TopUpActivity extends AppCompatActivity {
     private EditText ccv;
     private EditText amounttoadd;
     private Button paynow;
-    private String dbccno;
+    private String testccno = "1111222233334444";
     private Integer dbbalance;
+    private Integer cclimit;
 
     private TextView textview;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference rootref = database.getReference();
-    DatabaseReference ccroot = rootref.child("validcc");
-    DatabaseReference ccinst = ccroot.child("1111222233334444");
-    DatabaseReference ccref = ccinst.child("ccno");
-    DatabaseReference ccbalance = ccinst.child("limit");
+    DatabaseReference cclistref = rootref.child("validcc");
+  //  DatabaseReference sampleccref = cclistref.child("1111222233334444");
+  //  DatabaseReference sampleccno = sampleccref.child("ccno");
+  //  DatabaseReference samplecclimit = sampleccref.child("limit");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,21 +47,10 @@ public class TopUpActivity extends AppCompatActivity {
         amounttoadd = (EditText) findViewById(R.id.amounttoadd);
         paynow = (Button) findViewById(R.id.paynow);
         textview = (TextView) findViewById(R.id.textView);
-        // intent = paynow go to topupsuccessactivity and check against cc database and show success if cc info ok and remaining cc credit ok
+
        // myRef.setValue("Hello, World!");
 
-        ccref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                dbccno = dataSnapshot.getValue(String.class);
-                textview.setText(dbccno);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
       /*  ccbalance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,12 +67,42 @@ public class TopUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(ccno.getText().toString().equals(dbccno)) {
+                cclistref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(ccno.getText().toString())) {
+                            textview.setText("card no found - success");
+                            /*
+                                if(ccmonth.equals(dataSnapshot.child(ccno.getText().toString()).child("validmonth").getValue(String.class))
+                                        && ccyear.equals(dataSnapshot.child(ccno.getText().toString()).child("validyear").getValue(String.class))
+                                        && ccv.equals(dataSnapshot.child(ccno.getText().toString()).child("ccv").getValue(String.class))
+                                  )
+                                {
+                                    //card exists on file
+
+                                    cclimit = dataSnapshot.child(ccno.getText().toString()).child("limit").getValue(Integer.class);
+                                    if(Integer.parseInt(amounttoadd.getText().toString()) <= cclimit) {
+                                        textview.setText("success");
+                                        //listen to user.remaingCredit from firebase and update it with new value
+                                    }
+                                }
+                             */
+                        } else textview.setText("failure");
+                        // dbccno = dataSnapshot.getValue(String.class);
+                        // textview.setText(dbccno);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+             /*   if(ccno.getText().toString().equals(dbccno)) {
                     textview.setText("true");
                     // cc balance dan dusur
                     // user balance a ekle
                     // field lari temizleyelim toast ile success diyelim ayri success activity yapmayalim
-                }
+                }*/
             }
         });
 

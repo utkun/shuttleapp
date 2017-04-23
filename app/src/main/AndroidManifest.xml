@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AppActivity" />
-        <activity android:name=".TopUpActivity"></activity>
+        <activity android:name=".TopUpActivity" />
     </application>
 
 </manifest>
