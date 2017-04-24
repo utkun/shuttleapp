@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "497773380679",
+    "firebase_url": "https://shuttleapp-f2d2f.firebaseio.com",
+    "project_id": "shuttleapp-f2d2f",
+    "storage_bucket": "shuttleapp-f2d2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497773380679:android:8c42ab6d3fbeaae5",
+        "android_client_info": {
+          "package_name": "com.utkun.shuttleapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497773380679-acpjkpab3mbu75gmdgu1d6832igl2hm8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.utkun.shuttleapp",
+            "certificate_hash": "28088d646374f7be3767e64f168299748e24dc18"
+          }
+        },
+        {
+          "client_id": "497773380679-ilr3i33m0q24t5ov55ossp7ll42d5lgj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjfbvcDtrLFEO1hPdx9IHPHYtHE4I6nXg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "497773380679-ilr3i33m0q24t5ov55ossp7ll42d5lgj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
