@@ -12,6 +12,7 @@ import java.net.URLEncoder;
 
 import android.widget.ImageView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -30,6 +31,7 @@ public class AppActivity extends AppCompatActivity {
     private String credit;
     private String name;
     private TextView credittext;
+    private FirebaseAuth mAuth;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference rootref = database.getReference();
@@ -51,6 +53,8 @@ public class AppActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
+    
+        mAuth = FirebaseAuth.getInstance();
 
         topup = (Button) findViewById(R.id.topup);
         logout = (Button) findViewById(R.id.logout);
@@ -108,6 +112,17 @@ public class AppActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        logout.setOnClickListener(new View.OnClickListener(){
+    
+            @Override
+            public void onClick(View v)
+            {
+                mAuth.signOut();
+                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                startActivity(i);
+            }
+        });
+        
     }
 
 

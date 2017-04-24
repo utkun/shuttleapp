@@ -30,6 +30,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:10.0.1'
     compile files('libs/universal-image-loader-1.8.2.jar')
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0'
 }
 
 
