@@ -1,5 +1,7 @@
 package com.utkun.shuttleapp;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -8,7 +10,7 @@ import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class QRScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler
+public class QRScannerActivity extends Activity implements ZXingScannerView.ResultHandler
 {
 	private ZXingScannerView zXingScannerView;
 	
@@ -17,6 +19,9 @@ public class QRScannerActivity extends AppCompatActivity implements ZXingScanner
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_qrscanner);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 	
 	@Override

@@ -1,5 +1,7 @@
 package com.utkun.shuttleapp;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +15,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class TopUpActivity extends AppCompatActivity {
+public class TopUpActivity extends Activity
+{
 
     private EditText ccno;
     private EditText ccmonth;
@@ -39,6 +42,9 @@ public class TopUpActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_top_up);
+        
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         ccno = (EditText) findViewById(R.id.ccno);
         ccmonth = (EditText) findViewById(R.id.ccmonth);

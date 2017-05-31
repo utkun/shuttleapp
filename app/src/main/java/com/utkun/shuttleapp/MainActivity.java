@@ -141,8 +141,8 @@ public class MainActivity extends Activity
     
     public void scanQR(View view)
     {
-    //    Intent i = new Intent(getApplicationContext(),QRScannerActivity.class);
-        Intent i = new Intent(getApplicationContext(),ProfileActivity.class);
+        Intent i = new Intent(getApplicationContext(),QRScannerActivity.class);
+    //    Intent i = new Intent(getApplicationContext(),ProfileActivity.class);
         startActivity(i);
     }
     

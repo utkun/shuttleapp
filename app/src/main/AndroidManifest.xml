@@ -23,12 +23,24 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"/>
-        <activity android:name=".TopUpActivity"/>
-        <activity android:name=".QRScannerActivity">
+        <activity android:name=".TopUpActivity"
+                  android:label="@string/title_activity_topup"
+            android:parentActivityName=".MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".MainActivity"/>
+        </activity>
+        <activity android:name=".QRScannerActivity"
+                  android:label="@string/title_activity_qrscanner"
+                  android:parentActivityName=".MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".MainActivity"/>
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:label="@string/title_activity_profile">
+            android:label="@string/title_activity_profile"
+            android:parentActivityName=".MainActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".MainActivity"/>
         </activity>
     </application>
 

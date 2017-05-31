@@ -1,5 +1,6 @@
 package com.utkun.shuttleapp;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,7 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class ProfileActivity extends AppCompatActivity
+public class ProfileActivity extends Activity
 {
 	private int currentPosition = 0;
 	private String[] titles;
