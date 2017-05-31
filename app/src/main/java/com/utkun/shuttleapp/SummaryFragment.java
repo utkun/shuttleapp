@@ -30,8 +30,6 @@ import java.net.URLEncoder;
  */
 public class SummaryFragment extends Fragment
 {
-	private Button topup;
-	private Button logout;
 	private TextView welcometext;
 	private String uid = "28CXGydTzLScWTWPzkramqdMXCD3"; // set to uid coming from login page
 	private String credit;
@@ -75,21 +73,8 @@ public class SummaryFragment extends Fragment
 		super.onViewCreated(view, savedInstanceState);
 		
 		mAuth = FirebaseAuth.getInstance();
-		
-		topup = (Button) getActivity().findViewById(R.id.topup);
-		logout = (Button) getActivity().findViewById(R.id.logout);
 		welcometext = (TextView) getActivity().findViewById(R.id.welcometext);
 		credittext = (TextView) getActivity().findViewById(R.id.credittext);
-		
-		topup.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				Intent i = new Intent(getActivity(), TopUpActivity.class);
-				startActivity(i);
-			}
-		});
 		
 		nameref.addValueEventListener(new ValueEventListener()
 		{
@@ -138,17 +123,5 @@ public class SummaryFragment extends Fragment
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
-		logout.setOnClickListener(new View.OnClickListener()
-		{
-			
-			@Override
-			public void onClick(View v)
-			{
-				mAuth.signOut();
-				Intent i = new Intent(getActivity(), LoginActivity.class);
-				startActivity(i);
-			}
-		});
 	}
 }
