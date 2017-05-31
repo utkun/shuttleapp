@@ -51,5 +51,16 @@
         android:layout_alignStart="@+id/topup"
         android:layout_marginBottom="21dp" />
 
+    <Button
+        android:id="@+id/buttonScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan"
+        android:layout_above="@+id/credittext"
+        android:layout_alignLeft="@+id/logout"
+        android:layout_alignStart="@+id/logout"
+        android:layout_marginBottom="13dp"
+        android:onClick="scanQR"/>
+
 
 </RelativeLayout>

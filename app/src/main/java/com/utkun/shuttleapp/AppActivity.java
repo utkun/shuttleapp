@@ -50,58 +50,67 @@ public class AppActivity extends AppCompatActivity {
     String fullUrl = BASE_QR_URL;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app);
     
         mAuth = FirebaseAuth.getInstance();
-
+    
         topup = (Button) findViewById(R.id.topup);
         logout = (Button) findViewById(R.id.logout);
         welcometext = (TextView) findViewById(R.id.welcometext);
         credittext = (TextView) findViewById(R.id.credittext);
-
-        topup.setOnClickListener(new View.OnClickListener() {
+    
+        topup.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(),TopUpActivity.class);
+            public void onClick(View v)
+            {
+                Intent i = new Intent(getApplicationContext(), TopUpActivity.class);
                 startActivity(i);
             }
         });
-
-        nameref.addValueEventListener(new ValueEventListener() {
+    
+        nameref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 name = dataSnapshot.getValue(String.class);
                 welcometext.setText("Welcome, " + name);
             }
-
+        
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onCancelled(DatabaseError databaseError)
+            {
+            
             }
         });
-
-        creditref.addValueEventListener(new ValueEventListener() {
+    
+        creditref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
                 credit = dataSnapshot.getValue(String.class);
                 credittext.setText("Your remaining credit is: " + credit);
             }
-
+        
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onCancelled(DatabaseError databaseError)
+            {
+            
             }
         });
-
+    
         //qrgenerate
-
+    
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
         imgLoader = ImageLoader.getInstance();
         imgLoader.init(config);
-
-        qrImg = (ImageView)findViewById(R.id.qrImg);
+    
+        qrImg = (ImageView) findViewById(R.id.qrImg);
         //qrTxt = (TextView)findViewById(R.id.qrTxt);
         try {
             copiedStr = uid;
@@ -111,21 +120,27 @@ public class AppActivity extends AppCompatActivity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        logout.setOnClickListener(new View.OnClickListener(){
     
+        logout.setOnClickListener(new View.OnClickListener()
+        {
+        
             @Override
             public void onClick(View v)
             {
                 mAuth.signOut();
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
             }
         });
-        
+    
     }
-
-
+    
+    public void scanQR(View view)
+    {
+        Intent i = new Intent(getApplicationContext(),QRScanner.class);
+        startActivity(i);
+    }
+    
 /*
     public void btnPush(View view) {
         switch(view.getId())
