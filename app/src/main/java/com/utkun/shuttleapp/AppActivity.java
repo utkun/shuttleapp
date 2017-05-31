@@ -117,7 +117,6 @@ public class AppActivity extends AppCompatActivity {
             fullUrl += URLEncoder.encode(copiedStr, "UTF-8");
             imgLoader.displayImage(fullUrl, qrImg);
         } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     
@@ -159,3 +158,11 @@ public class AppActivity extends AppCompatActivity {
     */
 }
 
+/*
+
+TODO: drawer layour
+TODO: database user info
+TODO: http requestle qr kodu kaydet
+TODO: schedule
+
+ */
