@@ -1,160 +1,179 @@
 package com.utkun.shuttleapp;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import android.widget.ImageView;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
-import static android.R.attr.password;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "MyActivity";
+public class MainActivity extends Activity
+{
+
+    private Button topup;
+    private Button logout;
+    private TextView welcometext;
+    private String uid = "28CXGydTzLScWTWPzkramqdMXCD3"; // set to uid coming from login page
+    private String credit;
+    private String name;
+    private TextView credittext;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
 
-    private EditText loginemail;
-    private EditText loginpassword;
-    private Button loginbutton;
-	private Button signupbutton;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference rootref = database.getReference();
+    DatabaseReference usersref = rootref.child("users");
+    DatabaseReference uidref = usersref.child(uid);
+    DatabaseReference creditref = uidref.child("credit");
+    DatabaseReference nameref = uidref.child("name");
 
-    // we need to handle firebase email login and later also signup perhaps in different activity
-    // the signup process adds to auth page in firebase but not to actual database
-    // we need to programatically handle pulling auto generated auth uid of new account
-    // and create new entry in database using that uid
-    // so that we hold corresponding remaining credit etc
-    
-    // test
+    ImageLoader imgLoader;
+    ImageView qrImg;
+    String copiedStr;
+    //TextView qrTxt;
+    //ClipboardManager clipboard;
+
+    String BASE_QR_URL = "http://chart.apis.google.com/chart?cht=qr&chs=400x400&chld=M&choe=UTF-8&chl=";
+    String fullUrl = BASE_QR_URL;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        loginemail = (EditText) findViewById(R.id.loginemail);
-        loginpassword = (EditText) findViewById(R.id.loginpassword);
-        loginbutton = (Button) findViewById(R.id.loginbutton);
-		signupbutton = (Button) findViewById(R.id.signupbutton);
-
-        ///
-
-        loginbutton.setOnClickListener(new View.OnClickListener() {
+    
+        mAuth = FirebaseAuth.getInstance();
+    
+        topup = (Button) findViewById(R.id.topup);
+        logout = (Button) findViewById(R.id.logout);
+        welcometext = (TextView) findViewById(R.id.welcometext);
+        credittext = (TextView) findViewById(R.id.credittext);
+    
+        topup.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v)
             {
-				if (loginemail.getText().length() > 0 && loginpassword.getText().length() > 0) {
-					login(loginemail.getText().toString(), loginpassword.getText().toString());
-				}
-				else
-				{
-					Toast.makeText(MainActivity.this, "fields are mepty",
-								   Toast.LENGTH_SHORT).show();
-				}
+                Intent i = new Intent(getApplicationContext(), TopUpActivity.class);
+                startActivity(i);
             }
         });
-		
-		signupbutton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v)
-			{
-				if (loginemail.getText().length() > 0 && loginpassword.getText().length() > 0) {
-					signup(loginemail.getText().toString(), loginpassword.getText().toString());
-				}
-				else
-				{
-					Toast.makeText(MainActivity.this, "fields are mepty",
-								   Toast.LENGTH_SHORT).show();
-				}
-			}
-		});
-
-        ///
-
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+    
+        nameref.addValueEventListener(new ValueEventListener()
+        {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Intent i = new Intent(getApplicationContext(),AppActivity.class);
-                    startActivity(i);
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                name = dataSnapshot.getValue(String.class);
+                welcometext.setText("Welcome, " + name);
             }
-        };
-    }
-
-    private void signup(String email, String password)
-	{
-		mAuth.createUserWithEmailAndPassword(email, password)
-			 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-				 @Override
-				 public void onComplete(@NonNull Task<AuthResult> task) {
-					 Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-				
-					 // If sign in fails, display a message to the user. If sign in succeeds
-					 // the auth state listener will be notified and logic to handle the
-					 // signed in user can be handled in the listener.
-					 if (!task.isSuccessful()) {
-						 Toast.makeText(MainActivity.this, "Singup failed",
-										Toast.LENGTH_SHORT).show();
-					 }
-				
-					 // ...
-				 }
-			 });
-	}
-
-	private void login(String email, String password)
-	{
-		mAuth.signInWithEmailAndPassword(email, password)
-			 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-				 @Override
-				 public void onComplete(@NonNull Task<AuthResult> task) {
-					 Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-				
-					 // If sign in fails, display a message to the user. If sign in succeeds
-					 // the auth state listener will be notified and logic to handle the
-					 // signed in user can be handled in the listener.
-					 if (!task.isSuccessful()) {
-						 Log.w(TAG, "signInWithEmail:failed", task.getException());
-						 Toast.makeText(MainActivity.this, "Login failed",
-										Toast.LENGTH_SHORT).show();
-					 }
-				
-					 // ...
-				 }
-			 });
-	}
-	
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
+        
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+            
+            }
+        });
+    
+        creditref.addValueEventListener(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                credit = dataSnapshot.getValue(String.class);
+                credittext.setText("Your remaining credit is: " + credit);
+            }
+        
+            @Override
+            public void onCancelled(DatabaseError databaseError)
+            {
+            
+            }
+        });
+    
+        //qrgenerate
+    
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this).build();
+        imgLoader = ImageLoader.getInstance();
+        imgLoader.init(config);
+    
+        qrImg = (ImageView) findViewById(R.id.qrImg);
+        //qrTxt = (TextView)findViewById(R.id.qrTxt);
+        try {
+            copiedStr = uid;
+            fullUrl += URLEncoder.encode(copiedStr, "UTF-8");
+            imgLoader.displayImage(fullUrl, qrImg);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+    
+        logout.setOnClickListener(new View.OnClickListener()
+        {
+        
+            @Override
+            public void onClick(View v)
+            {
+                mAuth.signOut();
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+            }
+        });
+    
     }
-
-
+    
+    public void scanQR(View view)
+    {
+    //    Intent i = new Intent(getApplicationContext(),QRScannerActivity.class);
+        Intent i = new Intent(getApplicationContext(),ProfileActivity.class);
+        startActivity(i);
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
+			case R.id.action_settings:
+				Log.d("Menu","working");
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+		
+	}
 }
+
+
+/*
+
+TODO: drawer layout
+TODO: database user info
+TODO: http requestle qr kodu kaydet
+TODO: schedule
+
+ */

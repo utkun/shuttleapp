@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">shuttleapp</string>
     <string name="title_activity_menu">MenuActivity</string>
-
+    <string-array name="dummy">
+        <item>asf</item>
+        <item>aadgf</item>
+        <item>asdgf</item>
+        <item>asdgdsgf</item>
+        <item>a</item>
+    </string-array>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="settings_title">Settings</string>
 </resources>
