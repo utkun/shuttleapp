@@ -18,8 +18,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:background="#ffffff"
+
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"/>
-
+    <!--android:background="#ffffff"-->
 </android.support.v4.widget.DrawerLayout>
