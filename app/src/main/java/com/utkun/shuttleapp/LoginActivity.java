@@ -87,7 +87,7 @@ public class LoginActivity extends Activity
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Intent i = new Intent(getApplicationContext(),ProfileActivity.class);
+                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
                     startActivity(i);
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
