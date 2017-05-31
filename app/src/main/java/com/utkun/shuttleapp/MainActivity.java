@@ -2,6 +2,8 @@ package com.utkun.shuttleapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,7 +14,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,10 +48,13 @@ public class MainActivity extends FragmentActivity
 	FirebaseDatabase database = FirebaseDatabase.getInstance();
 	DatabaseReference rootref = database.getReference();
 	DatabaseReference usersref = rootref.child("users");
+	DatabaseReference uidref;
 	String BASE_QR_URL = "http://chart.apis.google.com/chart?cht=qr&chs=400x400&chld=M&choe=UTF-8&chl=";
 	String fullUrl = BASE_QR_URL;
 	int credit;
 	String name;
+	String email;
+	String phone;
 	String status;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -82,16 +93,19 @@ public class MainActivity extends FragmentActivity
 		//Auth
 		mAuth = FirebaseAuth.getInstance();
 		uid = mAuth.getCurrentUser().getUid();
-		DatabaseReference uidref = usersref.child(uid);
+		email = mAuth.getCurrentUser().getEmail();
+		uidref = usersref.child(uid);
 		
 		uidref.addValueEventListener(new ValueEventListener()
 		{
 			@Override
 			public void onDataChange(DataSnapshot dataSnapshot)
 			{
-				if (start) {
-					name = dataSnapshot.child("name").getValue(String.class);
-					credit = dataSnapshot.child("credit").getValue(Integer.class);
+				name = dataSnapshot.child("name").getValue(String.class);
+				credit = dataSnapshot.child("credit").getValue(Integer.class);
+				phone = dataSnapshot.child("phone").getValue(String.class);
+				if (start)
+				{
 					status = dataSnapshot.child("status").getValue(String.class);
 					driver = status.equals("driver");
 					if (driver)
@@ -108,9 +122,14 @@ public class MainActivity extends FragmentActivity
 					drawerList.setOnItemClickListener(new DrawerItemClickListener());
 					SummaryFragment fragment = new SummaryFragment();
 					getSupportFragmentManager().beginTransaction()
-											   .replace(R.id.content_frame, fragment).commit();
+											   .replace(R.id.content_frame, fragment,"MY_FRAGMENT").commit();
 					start = false;
 				}
+				else
+				{
+					((Subview) getSupportFragmentManager().findFragmentByTag("MY_FRAGMENT")).updateUI();
+				}
+				
 			}
 			
 			@Override
@@ -143,7 +162,7 @@ public class MainActivity extends FragmentActivity
 	void selectItem(int position)
 	{
 		currentPosition = position;
-
+		Fragment fragment;
 		switch (position)
 		{
 			case 0:
@@ -157,11 +176,12 @@ public class MainActivity extends FragmentActivity
 				}
 				break;
 			case 1:
-				SummaryFragment fragment = new SummaryFragment();
-				getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,fragment).commit();
+				fragment = new SummaryFragment();
+				getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,fragment,"MY_FRAGMENT").commit();
 				break;
 			case 2:
-				
+				fragment = new ProfileFragment();
+				getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,fragment,"MY_FRAGMENT").commit();
 				break;
 			case 5:
 				mAuth.signOut();
@@ -199,23 +219,83 @@ public class MainActivity extends FragmentActivity
 		
 	}
 	
-	public void scanQR(View view)
-	{
-		Intent i = new Intent(getApplicationContext(), QRScannerActivity.class);
-		//    Intent i = new Intent(getApplicationContext(),MainActivity.class);
-		startActivity(i);
-	}
-	
 	@Override
 	public void onBackPressed()
 	{
 		
 	}
+	
+	public void updateUserInfo(final String newName, final String oldPassword,
+							   final String newPassword1, final String newPassword2,
+							   final String newEmail, final String newPhone)
+	{
+		if (!name.equals(newName))
+		{
+			uidref.child("name").setValue(newName);
+		}
+		if (!phone.equals(newPhone))
+		{
+			uidref.child("phone").setValue(newPhone);
+		}
+		AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
+		mAuth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(
+				new OnCompleteListener<Void>()
+				{
+					@Override
+					public void onComplete(@NonNull Task<Void> task)
+					{
+						if (task.isSuccessful())
+						{
+							if (!email.equals(newEmail))
+							{
+								mAuth.getCurrentUser().updateEmail(email).addOnCompleteListener(
+										new OnCompleteListener<Void>()
+										{
+											@Override
+											public void onComplete(@NonNull Task<Void> task)
+											{
+												if (task.isSuccessful())
+												{
+													Toast.makeText(getApplicationContext(),"Email successfully changed",Toast.LENGTH_SHORT);
+												}
+												else
+												{
+													Toast.makeText(getApplicationContext(),"An error occurred during email update",Toast.LENGTH_SHORT);
+												}
+											}
+										});
+							}
+							if (!oldPassword.equals(newPassword1) && newPassword1.equals(newPassword2) && newPassword1.length() > 5)
+							{
+								mAuth.getCurrentUser().updatePassword(newPassword1).addOnCompleteListener(
+										new OnCompleteListener<Void>()
+										{
+											@Override
+											public void onComplete(@NonNull Task<Void> task)
+											{
+												if (task.isSuccessful())
+												{
+													Toast.makeText(getApplicationContext(),"Password successfully changed",Toast.LENGTH_SHORT);
+												}
+												else
+												{
+													Toast.makeText(getApplicationContext(),"An error occurred during password update",Toast.LENGTH_SHORT);
+												}
+											}
+										});
+							}
+						}
+						else
+						{
+							Toast.makeText(getApplicationContext(),"Your credentials are wrong",Toast.LENGTH_SHORT);
+						}
+					}
+				});
+	}
 }
 
 /*
 TODO: drawer layout
-TODO: database user info
 TODO: http requestle qr kodu kaydet
 TODO: schedule
  */

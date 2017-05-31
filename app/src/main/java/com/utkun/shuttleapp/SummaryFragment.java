@@ -20,7 +20,7 @@ import java.net.URLEncoder;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SummaryFragment extends Fragment
+public class SummaryFragment extends Fragment implements Subview
 {
 	private TextView welcometext;
 	private TextView credittext;
@@ -60,6 +60,12 @@ public class SummaryFragment extends Fragment
 		welcometext = (TextView) getActivity().findViewById(R.id.welcometext);
 		credittext = (TextView) getActivity().findViewById(R.id.credittext);
 		
+		updateUI();
+	}
+	
+	@Override
+	public void updateUI()
+	{
 		welcometext.setText("Welcome, " + parent.name);
 		if (parent.driver)
 		{
