@@ -51,12 +51,12 @@ public class LoginActivity extends Activity
             @Override
             public void onClick(View v)
             {
-				if (loginemail.getText().length() > 0 && loginpassword.getText().length() > 0) {
+				if (loginemail.getText().length() > 0 && loginpassword.getText().length() > 5) {
 					login(loginemail.getText().toString(), loginpassword.getText().toString());
 				}
 				else
 				{
-					Toast.makeText(LoginActivity.this, "fields are mepty",
+					Toast.makeText(LoginActivity.this, "Fields are invalid. Minimum password lenght is 6",
 								   Toast.LENGTH_SHORT).show();
 				}
             }
@@ -67,12 +67,12 @@ public class LoginActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				if (loginemail.getText().length() > 0 && loginpassword.getText().length() > 0) {
+				if (loginemail.getText().length() > 0 && loginpassword.getText().length() > 5) {
 					signup(loginemail.getText().toString(), loginpassword.getText().toString());
 				}
 				else
 				{
-					Toast.makeText(LoginActivity.this, "fields are mepty",
+					Toast.makeText(LoginActivity.this, "Fields are invalid. Minimum password lenght is 6",
 								   Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -87,7 +87,7 @@ public class LoginActivity extends Activity
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                    Intent i = new Intent(getApplicationContext(),ProfileActivity.class);
                     startActivity(i);
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
@@ -154,6 +154,10 @@ public class LoginActivity extends Activity
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-
+	
+	@Override
+	public void onBackPressed()
+	{
+		
+	}
 }
