@@ -15,6 +15,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends Activity
 {
@@ -113,6 +118,15 @@ public class LoginActivity extends Activity
 					 if (!task.isSuccessful()) {
 						 Toast.makeText(LoginActivity.this, "Singup failed",
 										Toast.LENGTH_SHORT).show();
+					 }
+					 else
+					 {
+						 String newUID = mAuth.getCurrentUser().getUid();
+						 DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("users");
+						 Map<String,Object> newUser = new HashMap<>();
+						 newUser.put("status","student");
+						 newUser.put("credit",0);
+						 ref.child(newUID).setValue(newUser);
 					 }
 				
 					 // ...

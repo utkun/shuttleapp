@@ -1,7 +1,9 @@
 package com.utkun.shuttleapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -35,7 +37,7 @@ public class MainActivity extends FragmentActivity
 	private boolean start = true;
 	// Drawer
 	boolean driver = false;
-	private int currentPosition = 0;
+	private int currentPosition = 1;
 	private ArrayList<String> titles;
 	private ListView drawerList;
 	private DrawerLayout drawerLayout;
@@ -60,6 +62,10 @@ public class MainActivity extends FragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		if (savedInstanceState != null) {
+			currentPosition = savedInstanceState.getInt("currentPosition");
+		}
+		start = true;
 		
 		// Drawer
 		titles = new ArrayList(Arrays.asList(getResources().getStringArray(R.array.dummy)));
@@ -119,9 +125,8 @@ public class MainActivity extends FragmentActivity
 															 android.R.layout.simple_list_item_activated_1,
 															 titles));
 					drawerList.setOnItemClickListener(new DrawerItemClickListener());
-					SummaryFragment fragment = new SummaryFragment();
-					getSupportFragmentManager().beginTransaction()
-											   .replace(R.id.content_frame, fragment,"MY_FRAGMENT").commit();
+					Log.d("just before select",Integer.toString(currentPosition));
+					selectItem(currentPosition);
 					start = false;
 				}
 				else
@@ -137,6 +142,12 @@ public class MainActivity extends FragmentActivity
 				
 			}
 		});
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig)
+	{
+		super.onConfigurationChanged(newConfig);
 	}
 	
 	@Override
@@ -160,6 +171,7 @@ public class MainActivity extends FragmentActivity
 	
 	void selectItem(int position)
 	{
+		Log.d("Position",Integer.toString(position));
 		currentPosition = position;
 		Fragment fragment;
 		switch (position)
@@ -182,7 +194,7 @@ public class MainActivity extends FragmentActivity
 				fragment = new ProfileFragment();
 				getSupportFragmentManager().beginTransaction().replace(R.id.content_frame,fragment,"MY_FRAGMENT").commit();
 				break;
-			case 5:
+			case 3:
 				mAuth.signOut();
 				Intent i = new Intent(getApplicationContext(),LoginActivity.class);
 				startActivity(i);
@@ -216,6 +228,27 @@ public class MainActivity extends FragmentActivity
 				return super.onOptionsItemSelected(item);
 		}
 		
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		
+		super.onDestroy();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putInt("currentPosition",currentPosition);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		currentPosition = savedInstanceState.getInt("currentPosition");
 	}
 	
 	@Override
@@ -294,7 +327,5 @@ public class MainActivity extends FragmentActivity
 }
 
 /*
-TODO: drawer layout
-TODO: http requestle qr kodu kaydet
-TODO: schedule
+TODO: fix rotation
  */
