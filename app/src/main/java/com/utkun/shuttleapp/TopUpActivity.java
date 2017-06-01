@@ -55,8 +55,16 @@ public class TopUpActivity extends Activity
         textview = (TextView) findViewById(R.id.textView);
 
        // myRef.setValue("Hello, World!");
-
-
+    
+        if (savedInstanceState != null)
+        {
+            ccno.setText(savedInstanceState.getString("ccno"));
+            ccno.setText(savedInstanceState.getString("ccmonth"));
+            ccno.setText(savedInstanceState.getString("ccyear"));
+            ccno.setText(savedInstanceState.getString("ccv"));
+            ccno.setText(savedInstanceState.getString("amounttoadd"));
+        }
+        
         paynow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,5 +108,16 @@ public class TopUpActivity extends Activity
             }
         });
 
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putString("ccno",ccno.getText().toString());
+        outState.putString("ccmonth",ccmonth.getText().toString());
+        outState.putString("ccyear",ccyear.getText().toString());
+        outState.putString("ccv",ccv.getText().toString());
+        outState.putString("amounttoadd",amounttoadd.getText().toString());
     }
 }

@@ -35,6 +35,7 @@ import java.util.Arrays;
 public class MainActivity extends FragmentActivity
 {
 	private boolean start = true;
+	private boolean onAppStart = true;
 	// Drawer
 	boolean driver = false;
 	private int currentPosition = 1;
@@ -64,6 +65,7 @@ public class MainActivity extends FragmentActivity
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState != null) {
 			currentPosition = savedInstanceState.getInt("currentPosition");
+			onAppStart = savedInstanceState.getBoolean("onAppStart");
 		}
 		start = true;
 		
@@ -126,7 +128,10 @@ public class MainActivity extends FragmentActivity
 															 titles));
 					drawerList.setOnItemClickListener(new DrawerItemClickListener());
 					Log.d("just before select",Integer.toString(currentPosition));
-					selectItem(currentPosition);
+					if (onAppStart) {
+						selectItem(currentPosition);
+						onAppStart = false;
+					}
 					start = false;
 				}
 				else
@@ -242,6 +247,7 @@ public class MainActivity extends FragmentActivity
 	{
 		super.onSaveInstanceState(outState);
 		outState.putInt("currentPosition",currentPosition);
+		outState.putBoolean("onAppStart",onAppStart);
 	}
 	
 	@Override
@@ -261,13 +267,17 @@ public class MainActivity extends FragmentActivity
 							   final String newPassword1, final String newPassword2,
 							   final String newEmail, final String newPhone)
 	{
-		if (!name.equals(newName))
+		if (name == null || !name.equals(newName))
 		{
 			uidref.child("name").setValue(newName);
 		}
-		if (!phone.equals(newPhone))
+		if (phone == null || !phone.equals(newPhone))
 		{
 			uidref.child("phone").setValue(newPhone);
+		}
+		if (oldPassword.length() < 6)
+		{
+			return;
 		}
 		AuthCredential credential = EmailAuthProvider.getCredential(email, oldPassword);
 		mAuth.getCurrentUser().reauthenticate(credential).addOnCompleteListener(

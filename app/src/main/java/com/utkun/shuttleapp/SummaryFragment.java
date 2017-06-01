@@ -67,7 +67,13 @@ public class SummaryFragment extends Fragment implements Subview
 	@Override
 	public void updateUI()
 	{
-		welcometext.setText("Welcome, " + parent.name);
+		if (parent.name != null) {
+			welcometext.setText("Welcome, " + parent.name);
+		}
+		else
+		{
+			welcometext.setText("Welcome");
+		}
 		if (parent.driver)
 		{
 			credittext.setText("Your earned credit is: " + Integer.toString(parent.credit));
