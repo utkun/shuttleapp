@@ -325,7 +325,3 @@ public class MainActivity extends FragmentActivity
 				});
 	}
 }
-
-/*
-TODO: fix rotation
- */

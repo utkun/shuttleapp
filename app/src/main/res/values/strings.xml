@@ -8,7 +8,7 @@
         <item>Profile</item>
         <item>Logout</item>
     </string-array>
-    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_main">shuttleapp</string>
     <string name="settings_title">Settings</string>
     <string name="title_activity_qrscanner">QR Scanner</string>
     <string name="title_activity_topup">Top-Up</string>
