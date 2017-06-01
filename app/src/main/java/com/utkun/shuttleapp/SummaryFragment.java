@@ -22,6 +22,7 @@ import java.net.URLEncoder;
  */
 public class SummaryFragment extends Fragment implements Subview
 {
+	boolean onStart = true;
 	private TextView welcometext;
 	private TextView credittext;
 	
@@ -75,19 +76,22 @@ public class SummaryFragment extends Fragment implements Subview
 		{
 			credittext.setText("Your remaining credit is: " + Integer.toString(parent.credit));
 			//qrgenerate
-			
-			ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getContext()).build();
-			imgLoader = ImageLoader.getInstance();
-			imgLoader.init(config);
-			
-			qrImg = (ImageView) getActivity().findViewById(R.id.qrImg);
-			//qrTxt = (TextView)findViewById(R.id.qrTxt);
-			try {
-				copiedStr = parent.uid;
-				fullUrl += URLEncoder.encode(copiedStr, "UTF-8");
-				imgLoader.displayImage(fullUrl, qrImg);
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+			if (onStart) {
+				ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getContext())
+						.build();
+				imgLoader = ImageLoader.getInstance();
+				imgLoader.init(config);
+				
+				qrImg = (ImageView) getActivity().findViewById(R.id.qrImg);
+				//qrTxt = (TextView)findViewById(R.id.qrTxt);
+				try {
+					copiedStr = parent.uid;
+					fullUrl += URLEncoder.encode(copiedStr, "UTF-8");
+					imgLoader.displayImage(fullUrl, qrImg);
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				onStart = false;
 			}
 		}
 	}
